@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <title>Barre de recherche</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #search-bar {
+            display: flex;
+            align-items: center;
+            width: 300px;
+            margin: 20px;
+            border: 2px solid #ddd;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background-color: white;
+        }
+
+        #search-btn {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #fff;
+            color: #ccc;
+            font-size: 16px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+        }
+
+        #autocomplete-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            z-index: 1;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            left: 28px;
+            top: 60px;
+        }
+
+        #autocomplete-list li {
+            padding: 20px;
+            border-bottom: 2px solid #ddd;
+            cursor: pointer;
+        }
+
+        #autocomplete-list li:hover {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+<div id="search-bar">
+    <input type="text" id="search-input" placeholder="Rechercher...">
+    <button id="search-btn"><i class="fas fa-search"></i></button>
+</div>
+
+<ul id="autocomplete-list"></ul>
+
+<script>
+    const autocompleteData = ['Morpion', 'Météo', 'Flappy Bird', 'Clicker Game', 'Cps teste', 'Tetris', 'Trouver le nombre', 'Jeux de la vie', 'Pong', 'Jeux de mémoire'];
+
+    const searchInput = document.getElementById('search-input');
+    const autocompleteList = document.getElementById('autocomplete-list');
+
+    searchInput.addEventListener('input', function () {
+        const inputValue = this.value.toLowerCase();
+        const filteredData = autocompleteData.filter(word => word.toLowerCase().includes(inputValue));
+        displayAutocompleteList(filteredData);
+    });
+
+    searchInput.addEventListener('click', function () {
+        autocompleteList.style.display = 'block';
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!searchInput.contains(e.target) && !autocompleteList.contains(e.target)) {
+            autocompleteList.style.display = 'none';
+        }
+    });
+
+    function displayAutocompleteList(data) {
+        autocompleteList.innerHTML = '';
+        data.forEach(word => {
+            const listItem = document.createElement('li');
+            listItem.textContent = word;
+            listItem.addEventListener('click', function () {
+                searchInput.value = word;
+                autocompleteList.style.display = 'none';
+            });
+            autocompleteList.appendChild(listItem);
+        });
+        autocompleteList.style.display = data.length > 0 ? 'block' : 'none';
+    }
+</script>
+</body>
+</html>
